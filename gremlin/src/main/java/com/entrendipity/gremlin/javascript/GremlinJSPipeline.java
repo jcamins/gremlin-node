@@ -1,10 +1,19 @@
 package com.entrendipity.gremlin.javascript;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Element;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.gremlin.Tokens;
 import com.tinkerpop.gremlin.groovy.GremlinGroovyPipeline;
+
+import com.entrendipity.gremlin.javascript.CapThreaded;
 
 /**
  * @author Frank Panetta (frank.panetta@entrendipity.com.au)
@@ -61,4 +70,19 @@ public class GremlinJSPipeline<S, E> extends GremlinGroovyPipeline<S, E> {
     public static Class<Edge> getEdgeTypeClass(){
         return Edge.class;
     }
+
+    public GremlinJSPipeline<S, ? extends Element> capThreaded() {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        Callable<GremlinGroovyPipeline> worker = new CapThreaded(this);
+        Future<GremlinGroovyPipeline> submit = executor.submit(worker);
+        try {
+            return (GremlinJSPipeline<S, ? extends Element>)submit.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+

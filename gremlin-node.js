@@ -276,6 +276,11 @@
         return this;
     }
 
+    GremlinJSPipeline.prototype.capThreaded = function() {
+        this.gremlinPipeline.capThreadedSync();
+        return this;
+    }
+
     exports.E = function(key, value){
         var gremlin = new GremlinJSPipeline(),
             k,
@@ -811,6 +816,10 @@
     
     GremlinJSPipeline.prototype.iterate = function() {
         this.gremlinPipeline.iterateSync();
+    }
+    
+    GremlinJSPipeline.prototype.iterateAsync = function(callback) {
+        this.gremlinPipeline.iterate(callback);
     }
 
     GremlinJSPipeline.prototype.iterator = function() {
