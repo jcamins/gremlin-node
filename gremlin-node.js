@@ -381,6 +381,16 @@
         return this;
     }
 
+    GremlinJSPipeline.prototype.orderMap = function(closure) {
+        if (_isClosure(closure)) {
+            this.engine.getBindingsSync(this.ctx).putSync("V", this.gremlinPipeline);
+            this.gremlinPipeline = this.engine.evalSync("V.orderMap" + closure);
+        } else {
+            this.gremlinPipeline.orderMapSync(closure);
+        }
+        return this;
+    }
+
     GremlinJSPipeline.prototype.out = function (){
         var args = _isArray(arguments[0]) ? arguments[0] : slice.call(arguments);
         this.gremlinPipeline.outSync(java.newArray("java.lang.String", args));
