@@ -542,6 +542,12 @@
         return this;
     }
 
+    GremlinJSPipeline.prototype.exceptStep = function (step) {
+        this.gremlinPipeline.exceptStepSync(step);
+        return this;
+    }
+
+
     GremlinJSPipeline.prototype.filter = function(closure) {
         this.engine.getBindingsSync(this.ctx).putSync("V", this.gremlinPipeline);
         this.gremlinPipeline = this.engine.evalSync("V.filter" + closure);
