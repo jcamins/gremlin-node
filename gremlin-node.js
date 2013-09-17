@@ -10,7 +10,7 @@
 
     java.options.push('-Djava.awt.headless=true');
 
-    if (process.env['GREMLIN_JAVA_OPTIONS'].length > 0) {
+    if (typeof process.env['GREMLIN_JAVA_OPTIONS'] !== 'undefined' && process.env['GREMLIN_JAVA_OPTIONS'].length > 0) {
         process.env['GREMLIN_JAVA_OPTIONS'].split(' ').forEach(function (opt) {
             java.options.push(opt);
         });
